@@ -19,6 +19,9 @@ pages = {
     "TOP ELECUS": "This page provides the latest news about US Elections",
     "TOP MIDEAST": "This page provides news about middle east and israel hammas war",
     "TOP MTGE": "This page provides news about US mortgage market",
+    "TOP JAPAN": "This page provides news on the japanese financial market",
+    "TOP MUNI": "This page provides news about municipal bond market in the united states",
+    "TOP INDIA": "This page provides news on india focusing on the indian financial market"
 }
 
 # Define a prompt template to ask the LLM to determine relevance between query and website descriptions
@@ -72,7 +75,21 @@ def handle_user_query(query, pdf_path=None):
 
 
 # Streamlit App Layout
-st.title("AI Query Agent")
+st.title("AI TOP page matcher Agent")
+
+# Display instructions or information
+st.sidebar.header("About")
+st.sidebar.text("This app uses an AI model to match your query with TOP page descriptions.")
+st.sidebar.text("If no match is found, it can also search on wiki")
+
+# Sidebar for page types
+st.sidebar.header("Supported Page Types")
+st.sidebar.text("The following types of pages are supported:")
+
+# Display the page types in the sidebar
+for page in pages:
+    st.sidebar.text(f"- {page}")
+
 
 # Input Query
 query = st.text_input("Enter your query:")
@@ -88,13 +105,6 @@ if st.button("Submit"):
         else:
             st.write("Could not find a matching TOP page. Searching on wiki")
             wiki_output = agent_executor.invoke({"input":query})["output"]
-            st.write(f"Wikipedia returned: {wiki_output}")
+            st.write(f"**Wikipedia returned**: {wiki_output}")
     else:
         st.write("Please enter a query.")
-
-# Display instructions or information
-st.sidebar.header("About")
-st.sidebar.text("This app uses an AI model to match your query with TOP page descriptions.")
-st.sidebar.text("If no match is found, it can also search on wiki")
-
-
